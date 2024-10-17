@@ -1,12 +1,11 @@
-const AWS = require('aws-sdk');
+import { APIGatewayEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import * as AWS from 'aws-sdk';
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.handler = async () => {
+export const handler: Handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   const params = {
     TableName: process.env.COFFEE_ORDERS_TABLE
   };
-
-  //yes
 
   try {
     const result = await dynamoDb.scan(params).promise();

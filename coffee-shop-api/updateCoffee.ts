@@ -1,7 +1,16 @@
-const AWS = require('aws-sdk');
+import { APIGatewayEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import * as AWS from 'aws-sdk';
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.handler = async (event) => {
+export const handler: Handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+
+  if (!event.body) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Invalid request, no body found' })
+    };
+  }
+
   const requestBody = JSON.parse(event.body);
   const { order_id, new_status, customer_name } = requestBody;
 
